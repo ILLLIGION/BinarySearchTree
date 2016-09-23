@@ -4,7 +4,26 @@
 template <typename T>
 class BinarySearchTree {
 public:
-	struct Node;
+	struct Node {
+		Node(T value) : value_(value), left_(nullptr), right_(nullptr) {}
+		T value_;
+		Node * left_;
+		Node * right_;
+		friend std::ostream& operator<<(std::ostream& out, const Node& node)
+		{
+			out << node.value_ << ' ';
+			if (node.left_) out << *node.left_;
+			if (node.right_) out << *node.right_;
+			return out;
+		}
+		~Node()
+		{
+			if (left_)
+				delete left_;
+			if (right_)
+				delete right_;
+		};
+	};
 	BinarySearchTree() : root_(nullptr), size_(0) {};
 
 	BinarySearchTree(const std::initializer_list<T> & list) : BinarySearchTree()
@@ -74,24 +93,6 @@ private:
 	Node * root_;
 	size_t size_;
 
-	struct Node {
-		Node(T value) : value_(value), left_(nullptr), right_(nullptr) {}
-		T value_;
-		Node * left_;
-		Node * right_;
-		friend std::ostream& operator<<(std::ostream& out, const Node& node)
-		{
-			out << node.value_ << ' ';
-			if (node.left_) out << *node.left_;
-			if (node.right_) out << *node.right_;
-			return out;
-		}
-		~Node()
-		{
-			if (left_)
-				delete left_;
-			if (right_)
-				delete right_;
-		};
-	};
+	
 };
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
