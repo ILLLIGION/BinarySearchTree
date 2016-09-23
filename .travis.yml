@@ -1,11 +1,11 @@
 language: cpp
 compiler:
--clang
+  - clang
 addons:
-apt:
-packages:
--cmake
+  apt:
+    packages:
+      - cmake
 script:
--mkdir build
--cd build
--cmake .. && make
+  - mkdir build
+  - cd build
+  - cmake .. && make
