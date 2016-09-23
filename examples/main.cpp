@@ -1,4 +1,4 @@
-#include "BinarySearchTree.h"
+#include "../include/BinarySearchTree.h"
 
 	void main(int argc, char* argv[])
 	{
