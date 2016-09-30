@@ -6,7 +6,7 @@ class BinarySearchTree {
 public:
 					struct Node {
 						Node(T value) : value_(value), left_(nullptr), right_(nullptr) {}
-						auto copy(Node* node) -> Node*
+						void copy(Node* node) const noexcept
 						{
 							value_ = node->value_;
 							delete left_;
@@ -20,10 +20,9 @@ public:
 							else
 								right_ = nullptr;
 							if (left_)
-								left_ = left_->copy(node->left_);
+								left_->copy(node->left_);
 							if (right_)
-								right_ = right_->copy(node->right_);
-							return this;
+								right_->copy(node->right_);
 						}
 						Node * left_;
 						Node * right_;
@@ -31,20 +30,18 @@ public:
 						auto compare (Node* node) const noexcept -> bool
 						{
 
-							bool equalityL = true, equalityR = true;
-							if ((left_ && !node->left_) || (right_ && !node->right_) || (!left_ && node->left_) || (!right_ && node->right_) 
-																												|| (value_ != node->value_))
-								return false;
-							else
-							{
-								if (!left_ && !right_)
-									return true;
-								if (left_)
-									equalityL = left_->equal(node->left_);
-								if (right_)
-									equalityR = right_->equal(node->right_);
-								return equalityL && equalityR;
-							}
+							bool equalityL, equalityR;
+							if (left_ && !node->left_) 	return false;
+							if (right_ && !node->right_) return false;
+							if (!left_ && node->left_) return false;
+							if (!right_ && node->right_) return false;
+							if (value_ != node->value_) return false;
+							if (!left_ && !right_) return true;
+							if (left_)
+								equalityL = left_->compare(node->left_);
+							if (right_)
+								equalityR = right_->compare(node->right_);
+							return (equalityL && equalityR);
 						}
 
 						~Node()
@@ -65,12 +62,11 @@ public:
 	BinarySearchTree(const BinarySearchTree& tree) : size_(tree.size_), root_(nullptr)
 	{
 		root_ = new Node(0);
-		root_ = root_->copy(tree.root_);
+		root_->copy(tree.root_);
 	}
 
-	BinarySearchTree(BinarySearchTree&& tree) : size_(tree.size_), root_(nullptr)
+	BinarySearchTree(BinarySearchTree&& tree) : size_(tree.size_), root_(tree.root)
 	{
-		root_ = tree.root;
 		tree.root = nullptr;
 		tree.size = 0;
 	}
@@ -168,7 +164,6 @@ public:
 		return in;
 	}
 
-	////////////////////////////////
 	auto BinarySearchTree<T>::operator = (BinarySearchTree<T>&& tree) -> BinarySearchTree<T>&
 	{
 		if (this == &tree)
@@ -189,7 +184,7 @@ public:
 
 		if (tree.root_)
 		{
-			root_ = new Node;
+			root_ = new Node(0);
 			tree.root_->copy(root_);
 		}
 		else
@@ -200,13 +195,10 @@ public:
 		size_ = tree.size_;
 		return *this;
 	}
-	///////////////////////////
+
 	auto operator == (const BinarySearchTree& tree) -> bool
 	{
-		if (root_->compare(tree.root_))
-			return true;
-		else
-			return false;
+		return root_->compare(tree.root_)
 	};
 
 private:
