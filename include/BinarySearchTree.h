@@ -39,8 +39,8 @@ public:
 						{
 
 							bool equalityL = true, equalityR = true;
-							if ((left && !node->left) || (right && !node->right) || (!left && node->left) || (!right && node->right) 
-																												|| (value != node->value))
+							if ((left_ && !node->left_) || (right_ && !node->right_) || (!left_ && node->left_) || (!right_ && node->right_) 
+																												|| (value_ != node->value_))
 								return false;
 							else
 							{
