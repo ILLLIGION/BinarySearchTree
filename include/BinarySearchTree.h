@@ -47,7 +47,7 @@ public:
 								if (!left_ && !right_)
 									return true;
 								if (left_)
-									equalityL = left->equal(node->left_);
+									equalityL = left_->equal(node->left_);
 								if (right_)
 									equalityR = right_->equal(node->right_);
 								return equalityL && equalityR;
@@ -166,13 +166,13 @@ public:
 	friend auto operator >> (std::istream& in, BinarySearchTree<T>& tree) -> std::istream&
 	{
 		T value;
-		while (in >> value_) tree.insert(value_);
+		while (in >> value) tree.insert(value);
 		return in;
 	}
 	friend auto operator >> (std::ifstream& in, BinarySearchTree<T>& tree) -> std::ifstream&
 	{
 		T value;
-		while (in >> value_) tree.insert(value_);
+		while (in >> value) tree.insert(value);
 		return in;
 	}
 
