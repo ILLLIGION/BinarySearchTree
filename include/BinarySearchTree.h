@@ -44,12 +44,12 @@ public:
 								return false;
 							else
 							{
-								if (!left && !right)
+								if (!left_ && !right_)
 									return true;
-								if (left)
-									equalityL = left->equal(node->left);
-								if (right)
-									equalityR = right->equal(node->right);
+								if (left_)
+									equalityL = left->equal(node->left_);
+								if (right_)
+									equalityR = right_->equal(node->right_);
 								return equalityL && equalityR;
 							}
 						}
