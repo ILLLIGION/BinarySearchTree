@@ -28,13 +28,6 @@ public:
 						Node * left_;
 						Node * right_;
 						T value_;
-						friend std::ostream& operator<<(std::ostream& out, const Node& node)
-							{
-							out << node.value_ << ' ';
-							if (node.left_) out << *node.left_;
-							if (node.right_) out << *node.right_;
-							return out;
-							}
 						auto compare (Node* node) const noexcept -> bool
 						{
 
