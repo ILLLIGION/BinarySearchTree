@@ -50,7 +50,7 @@ public:
 						~Node()
 						{
 							delete left_; left_ = nullptr;
-							if (right_) delete right_;
+							delete right_; right_ = nullptr;
 						};
 					};
 
@@ -77,12 +77,11 @@ public:
 
 	~BinarySearchTree()
 	{
-		delete root_;
+		delete root_; root_ = nullptr;
 		size_ = 0;
 	};
-	auto size() const noexcept->size_t
+	auto size() const noexcept -> size_t
 	{
-		size_ = 0;
 		return size_;
 	};
 	auto insert(const T & value) noexcept -> bool
