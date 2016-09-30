@@ -166,19 +166,19 @@ public:
 	friend auto operator >> (std::istream& in, BinarySearchTree<T>& tree) -> std::istream&
 	{
 		T value;
-		while (in >> value) tree.insert(value);
+		while (in >> value_) tree.insert(value_);
 		return in;
 	}
 	friend auto operator >> (std::ifstream& in, BinarySearchTree<T>& tree) -> std::ifstream&
 	{
 		T value;
-		while (in >> value) tree.insert(value);
+		while (in >> value_) tree.insert(value_);
 		return in;
 	}
 
 	auto operator == (const BinarySearchTree& tree) -> bool
 	{
-		if (root->compare(tree.root))
+		if (root_->compare(tree.root_))
 			return true;
 		else
 			return false;
