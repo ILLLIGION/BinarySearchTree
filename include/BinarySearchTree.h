@@ -168,6 +168,39 @@ public:
 		return in;
 	}
 
+	////////////////////////////////
+	auto BinarySearchTree<T>::operator = (BinarySearchTree<T>&& tree) -> BinarySearchTree<T>&
+	{
+		if (this == &tree)
+			return *this;
+
+		delete root_;
+		size_ = tree.size_;
+		root_ = tree.root_;
+		tree.root_ = nullptr;
+		tree.size_ = 0;
+		return *this;
+	}
+
+	auto BinarySearchTree<T>::operator = (const BinarySearchTree<T>& tree) -> BinarySearchTree<T>&
+	{
+		if (this == &tree)
+			return *this;
+
+		if (tree.root_)
+		{
+			root_ = new Node;
+			tree.root_->copy(root_);
+		}
+		else
+		{
+			delete root_;
+			root_ = nullptr;
+		}
+		size_ = tree.size_;
+		return *this;
+	}
+	///////////////////////////
 	auto operator == (const BinarySearchTree& tree) -> bool
 	{
 		if (root_->compare(tree.root_))
