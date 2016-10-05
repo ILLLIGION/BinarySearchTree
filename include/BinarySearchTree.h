@@ -165,7 +165,7 @@ public:
 		return in;
 	}
 
-	auto BinarySearchTree<T>::operator= (BinarySearchTree<T>&& tree) -> BinarySearchTree<T>&
+	auto operator= (BinarySearchTree<T>&& tree) -> BinarySearchTree<T>&
 	{
 		if (this == &tree)
 			return *this;
@@ -178,7 +178,7 @@ public:
 		return *this;
 	}
 
-	auto BinarySearchTree<T>::operator= (const BinarySearchTree<T>& tree) -> BinarySearchTree<T>&
+	auto operator= (const BinarySearchTree<T>& tree) -> BinarySearchTree<T>&
 	{
 		if (this == &tree)
 			return *this;
