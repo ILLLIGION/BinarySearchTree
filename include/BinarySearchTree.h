@@ -165,7 +165,7 @@ public:
 		return in;
 	}
 
-	auto BinarySearchTree<T>::operator = (BinarySearchTree<T>&& tree) -> BinarySearchTree<T>&
+	auto BinarySearchTree<T>::operator= (BinarySearchTree<T>&& tree) -> BinarySearchTree<T>&
 	{
 		if (this == &tree)
 			return *this;
@@ -178,14 +178,14 @@ public:
 		return *this;
 	}
 
-	auto BinarySearchTree<T>::operator = (const BinarySearchTree<T>& tree) -> BinarySearchTree<T>&
+	auto BinarySearchTree<T>::operator= (const BinarySearchTree<T>& tree) -> BinarySearchTree<T>&
 	{
 		if (this == &tree)
 			return *this;
 
 		if (tree.root_)
 		{
-			root_ = new Node(root_->copy(tree.root_)); //left_ = new Node(node->left_->value_);
+			root_ = new Node(root_.copy(tree.root_)); //left_ = new Node(node->left_->value_);
 		}
 		else
 		{
@@ -198,8 +198,8 @@ public:
 
 	auto operator == (const BinarySearchTree& tree) -> bool
 	{
-		return root_->compare(tree.root_)
-	};
+		return root_->compare(tree.root_);
+	}
 
 private:
 	Node * root_;
