@@ -7,7 +7,7 @@ class BinarySearchTree {
 public:
 	struct Node {
 		Node(T value) : value_(value), left_(nullptr), right_(nullptr) {}
-		void copy(Node* node) const noexcept
+		void copy(Node* node) noexcept
 		{
 			value_ = node->value_;
 			delete left_;
@@ -165,7 +165,7 @@ public:
 		return in;
 	}
 
-	auto operator= (BinarySearchTree<T>&& tree) -> BinarySearchTree<T>&
+	auto operator = (BinarySearchTree<T>&& tree) -> BinarySearchTree<T>&
 	{
 		if (this == &tree)
 			return *this;
@@ -178,14 +178,14 @@ public:
 		return *this;
 	}
 
-	auto operator= (const BinarySearchTree<T>& tree) -> BinarySearchTree<T>&
+	auto operator = (const BinarySearchTree<T>& tree) -> BinarySearchTree<T>&
 	{
 		if (this == &tree)
 			return *this;
 
 		if (tree.root_)
 		{
-			root_ = new Node(root_->copy(tree.root_)); //left_ = new Node(node->left_->value_);
+			root_->copy(tree.root_); //left_ = new Node(node->left_->value_);
 		}
 		else
 		{
