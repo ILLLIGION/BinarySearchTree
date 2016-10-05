@@ -185,7 +185,7 @@ public:
 
 		if (tree.root_)
 		{
-			root_ = new Node(root_.copy(tree.root_)); //left_ = new Node(node->left_->value_);
+			root_ = new Node(root_->copy(tree.root_)); //left_ = new Node(node->left_->value_);
 		}
 		else
 		{
