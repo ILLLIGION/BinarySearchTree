@@ -1,3 +1,7 @@
+
+#include "../include/BinarySearchTree.h"
+#include "catch.hpp"
+
 SCENARIO("if element is in tree, insert must return false") 
 {
     GIVEN("tree")
