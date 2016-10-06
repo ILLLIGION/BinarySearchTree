@@ -54,23 +54,6 @@ SCENARIO("if inserted value is lesser than the value of root, inserted value mus
 }
 
 
-SCENARIO("if inserted value is bigger than the value of root, inserted value must be inserted on the right from root") 
-{
-    GIVEN("two trees")
-    {
-        BinarySearchTree<int> tree1{1, 2, 5};
-        BinarySearchTree<int> tree2{1, 2};
-        WHEN("insert element")
-        {
-            tree2.insert(5);
-            THEN("value must be inserted on the right from the root")
-            {
-                REQUIRE(tree1 == tree2);
-            }
-        }
-    }
-}
-
 SCENARIO("if element is (or not) in tree, size must increase by one (or not change)") 
 {
     GIVEN("tree, its size")
