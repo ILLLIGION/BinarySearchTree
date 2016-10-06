@@ -54,7 +54,7 @@ SCENARIO("if inserted value is lesser (or bigger) than the value of root, insert
         }
         WHEN("insert element")
         {
-            tree4.insert(-1);
+            tree4.insert(5);
             THEN("value must be inserted on the right from the root")
             {
                 REQUIRE(tree3 == tree4);
