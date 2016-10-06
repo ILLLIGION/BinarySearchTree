@@ -12,6 +12,8 @@ SCENARIO("if element is in tree, insert must return false")
             THEN("must be false")
             {
                 REQUIRE(!tree.insert(1));
+                REQUIRE(!tree.insert(3));
+                REQUIRE(!tree.insert(5));
             }
         }
     }
@@ -27,6 +29,8 @@ SCENARIO("if element is not in tree, insert method must return true")
             THEN("must be truy")
             {
                 REQUIRE(tree.insert(0));
+                REQUIRE(tree.insert(2));
+                REQUIRE(tree.insert(4));
             }
         }
     }
