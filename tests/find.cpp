@@ -11,8 +11,8 @@ SCENARIO("pointer returned, if an element is in the tree")
             THEN("pointer isn't nullptr") 
             {
                 REQUIRE(*(tree.find(1)) == 1);
-                REQUIRE(*(tree.find(4)) == 1);
-                REQUIRE(*(tree.find(5)) == 1);
+                REQUIRE(*(tree.find(4)) == 4);
+                REQUIRE(*(tree.find(5)) == 5);
             }
         }
     }
