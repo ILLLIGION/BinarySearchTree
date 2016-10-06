@@ -3,20 +3,28 @@
 
 SCENARIO("size of empty tree is 0") {
     GIVEN("empty tree") {
-        BinarySearchTree<int> tree;
+        BinarySearchTree<int> tree1;
+        BinarySearchTree<char> tree2;
+        BinarySearchTree<double> tree3;
         WHEN("size") {
             THEN("size must be 0") {
-                REQUIRE(tree.size() == 0);
+                REQUIRE(tree1.size() == 0);
+                REQUIRE(tree2.size() == 0);
+                REQUIRE(tree3.size() == 0);
             }
         }
     }
 }
 SCENARIO("size of not empty tree isn't 0") {
     GIVEN("not empty tree") {
-        BinarySearchTree<int> tree{1, 2, 3};
+        BinarySearchTree<int> tree1{1, 2, 3};
+        BinarySearchTree<char> tree2{'a', 'b', 'c'};
+        BinarySearchTree<double> tree3{0.1, 0.2, 0.3};
         WHEN("decide size") {
             THEN("size isn't 0") {
-                REQUIRE(tree.size() != 0);
+                REQUIRE(tree1.size() != 0);
+                REQUIRE(tree2.size() != 0);
+                REQUIRE(tree3.size() != 0);
             }
         }
     }
