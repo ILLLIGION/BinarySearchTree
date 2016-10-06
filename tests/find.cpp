@@ -11,6 +11,8 @@ SCENARIO("pointer returned, if an element is in the tree")
             THEN("pointer isn't nullptr") 
             {
                 REQUIRE(*(tree.find(1)) == 1);
+                REQUIRE(*(tree.find(4)) == 1);
+                REQUIRE(*(tree.find(5)) == 1);
             }
         }
     }
@@ -25,7 +27,9 @@ SCENARIO("nullptr returned, if an element isn't in the tree")
         {
             THEN("pointer is nullptr") 
             {
-                REQUIRE(tree.find(10000) == nullptr);
+                REQUIRE(tree.find(2) == nullptr);
+                REQUIRE(tree.find(3) == nullptr);
+                REQUIRE(tree.find(6) == nullptr);
             }
         }
     }
@@ -41,7 +45,12 @@ SCENARIO("method works fro both constant and not constant trees")
         {
             THEN("return two pointers") 
             {
-                REQUIRE(tree1.find(3) && tree2.find(5));
+                REQUIRE(tree1.find(2));
+                REQUIRE(tree1.find(3));
+                REQUIRE(tree1.find(6));
+                REQUIRE(tree2.find(1));
+                REQUIRE(tree2.find(4));
+                REQUIRE(tree2.find(5));
             }
         }
     }
