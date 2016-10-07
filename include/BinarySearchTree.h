@@ -234,8 +234,8 @@ public:
 		size_ = tree.size_;
 		tree.size_ = 0;
 
-		root = tree.root;
-		tree.root = nullptr;
+		root_ = tree.root_;
+		tree.root_ = nullptr;
 		return *this;
 	}
 
