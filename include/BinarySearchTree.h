@@ -226,7 +226,7 @@ public:
 		return in;
 	}
 
-	auto BinarySearchTree<T>::operator=(BinarySearchTree &&tree) -> BinarySearchTree&
+	auto operator=(BinarySearchTree &&tree) -> BinarySearchTree&
 	{
 		if (this == &tree)
 			return *this;
