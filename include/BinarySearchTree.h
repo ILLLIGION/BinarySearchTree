@@ -46,6 +46,44 @@ public:
 			return (equalityL && equalityR);
 		}
 
+		auto remove_node(const T& value, std::shared_ptr<Node>& node) noexcept ->  bool
+		{
+			if (!node)
+				return false;
+
+			if (value < node->value_)
+				remove_node(value, node->left_);
+			if (value > node->value_)
+				remove_node(value, node->right_);
+			if (value_ == node->value_)
+			{
+				if (!node->left_ && !node->right_)
+				{
+					node = nullptr;
+					return true;
+				}
+				else if (node->left_ && !node->right_)
+				{
+					node = node->left_;
+					return true;
+				}
+				else if (!node->left_ && node->right_)
+				{
+					node = node->right_;
+					return true;
+				}
+				else
+				{
+					std::shared_ptr<Node> new_right_ = node->right_;
+					node = node->left_;
+					std::shared_ptr<Node> new_node = node;
+					while (new_node->right_)
+						new_node = new_node->right_;
+					new_node->right_ = new_right_;
+					return true;
+				}
+			}
+		}
 
 		~Node()
 		{
@@ -64,7 +102,7 @@ public:
 
 	BinarySearchTree(const BinarySearchTree& tree) : size_(tree.size_), root_(std::make_shared<Node>(nullptr))
 	{
-		root_=root_->copy(tree.root_);
+		root_ = root_->copy(tree.root_);
 	}
 
 	BinarySearchTree(BinarySearchTree&& tree) : size_(tree.size_), root_(tree.root)
@@ -141,53 +179,17 @@ public:
 		else return false;
 	}
 
-	/*auto remove_r(const T& value, std::shared_ptr<Node> node) noexcept -> bool
+	auto remove(const T& value) noexcept -> bool
 	{
-		if (!node)
-			return false;
-
-		if (value < node->value_)
-			remove_r(value, node->left_);
-		else if (value > node->value_)
-			remove_r(value, node->right_);
+		bool result = false;
+		if (root_)
+			result = Node::remove(value, root);
 		else
-		{
-			if (!node->left_)
-			{
-				auto old = node;
-				node = old->right_;
-			}
-			else if (!node->right_)
-			{
-				auto old = node;
-				node = old->left_;
-			}
-			else if (!node->left_ && !node->right_)
-			{
-				delete node;
-			}
-			else
-			{
-				auto min = node->right_;
-				while (min->left_)
-					min = min->left_;
-				node->value_ = min->value_;
-				remove_r(min->value_, node->right_);
-			}
-		}
-		return true;
-	}
-
-	auto BinarySearchTree<T>::remove(const T& value) noexcept -> bool
-	{
-		if (remove_r(value, root_))
-		{
+			return false;
+		if (result)
 			size_--;
-			return true;
-		}
-
-		return false;
-	}*/
+		return result;
+	}
 
 	auto CLR(std::ofstream& out, std::shared_ptr<Node> node) const noexcept -> bool
 	{
@@ -257,4 +259,3 @@ private:
 	std::shared_ptr<Node> root_;
 	size_t size_;
 };
-
