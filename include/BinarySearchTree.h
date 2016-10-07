@@ -1,34 +1,35 @@
 #pragma once
 #include <iostream>
 #include <fstream>
+#include <memory>
 
 template <typename T>
 class BinarySearchTree {
 public:
 	struct Node {
 		Node(T value) : value_(value), left_(nullptr), right_(nullptr) {}
-		void copy(Node* node) noexcept
+		auto copy(std::shared_ptr<Node> node) noexcept -> std::shared_ptr<Node>
 		{
 			value_ = node->value_;
-			delete left_;
-			delete left_;
 			if (node->left_)
-				left_ = new Node(node->left_->value_);
+				left_ = node->left_;
 			else
 				left_ = nullptr;
 			if (node->right_)
-				right_ = new Node(node->right_->value_);
+				right_ = node->right_;
 			else
 				right_ = nullptr;
 			if (left_)
 				left_->copy(node->left_);
 			if (right_)
 				right_->copy(node->right_);
+
+			return std::make_shared<Node>(this);
 		}
-		Node * left_;
-		Node * right_;
+		std::shared_ptr<Node> left_;
+		std::shared_ptr<Node> right_;
 		T value_;
-		auto compare(Node* node) const noexcept -> bool
+		auto compare(std::shared_ptr<Node> node) const noexcept -> bool
 
 		{
 			bool equalityL, equalityR;
@@ -45,25 +46,25 @@ public:
 			return (equalityL && equalityR);
 		}
 
+
 		~Node()
 		{
-			delete left_; left_ = nullptr;
-			delete right_; right_ = nullptr;
+			left_ = nullptr;
+			right_ = nullptr;
 		};
 	};
 
 	BinarySearchTree() : root_(nullptr), size_(0) {};
 
-	BinarySearchTree(const std::initializer_list<T> & list) : BinarySearchTree()
+	BinarySearchTree(const std::initializer_list<T> &list) : size_(list.size()), root_(nullptr)
 	{
-		for (auto& value : list)
-			insert(value);
-	};
+		for (auto it = list.begin(); it != list.end(); ++it)
+			insert(*it);
+	}
 
-	BinarySearchTree(const BinarySearchTree& tree) : size_(tree.size_), root_(nullptr)
+	BinarySearchTree(const BinarySearchTree& tree) : size_(tree.size_), root_(std::make_shared<Node>(nullptr))
 	{
-		root_ = new Node(0);
-		root_->copy(tree.root_);
+		root_=root_->copy(tree.root_);
 	}
 
 	BinarySearchTree(BinarySearchTree&& tree) : size_(tree.size_), root_(tree.root)
@@ -74,39 +75,51 @@ public:
 
 	~BinarySearchTree()
 	{
-		delete root_; root_ = nullptr;
+		root_ = nullptr;
 		size_ = 0;
 	};
 	auto size() const noexcept -> size_t
 	{
 		return size_;
 	};
-	auto insert(const T & value) noexcept -> bool
+	auto insert(const T& value) noexcept -> bool
 	{
-		if (size_ == 0)
-		{
-			root_ = new Node(value);
-			size_ = 1;
+		bool result = false;
+		if (root_ == nullptr) {
+			root_ = std::make_shared<Node>(value);
 			return true;
 		}
-		Node* curNode = root_;
-		Node* prevNode = nullptr;
-		while (curNode)
+		std::shared_ptr<Node> thisNode = root_;
+		while (!result)
 		{
-			prevNode = curNode;
-			if (value == curNode->value_) return false;
-			if (value < curNode->value_) curNode = curNode->left_;
-			else curNode = curNode->right_;
+			if (value == thisNode->value_)
+				return false;
+			if (value < thisNode->value_)
+			{
+				if (!thisNode->left_)
+				{
+					thisNode->left_ = std::make_shared<Node>(value);
+					result = true;
+				}
+				else
+					thisNode = thisNode->left_;
+			}
+			else if (!thisNode->right_)
+			{
+				thisNode->right_ = std::make_shared<Node>(value);
+				result = true;
+			}
+			else
+				thisNode = thisNode->right_;
 		}
-		if (value < prevNode->value_) prevNode->left_ = new Node(value);
-		else prevNode->right_ = new Node(value);
 		size_++;
-		return true;
-	};
+		return result;
+	}
+
 	auto find(const T & value) const noexcept -> const T *
 	{
 		if (size_ == 0) return nullptr;
-	Node* curNode = root_;
+	std::shared_ptr<Node> curNode = root_;
 	do
 	{
 		if (value == curNode->value_) return &curNode->value_;
@@ -116,7 +129,7 @@ public:
 	return nullptr;
 	};
 
-	auto RCL(std::ostream& out, Node* node) const noexcept -> bool
+	auto RCL(std::ostream& out, std::shared_ptr<Node> node) const noexcept -> bool
 	{
 		if (node)
 		{
@@ -128,7 +141,55 @@ public:
 		else return false;
 	}
 
-	auto CLR(std::ofstream& out, Node* node) const noexcept -> bool
+	/*auto remove_r(const T& value, std::shared_ptr<Node> node) noexcept -> bool
+	{
+		if (!node)
+			return false;
+
+		if (value < node->value_)
+			remove_r(value, node->left_);
+		else if (value > node->value_)
+			remove_r(value, node->right_);
+		else
+		{
+			if (!node->left_)
+			{
+				auto old = node;
+				node = old->right_;
+			}
+			else if (!node->right_)
+			{
+				auto old = node;
+				node = old->left_;
+			}
+			else if (!node->left_ && !node->right_)
+			{
+				delete node;
+			}
+			else
+			{
+				auto min = node->right_;
+				while (min->left_)
+					min = min->left_;
+				node->value_ = min->value_;
+				remove_r(min->value_, node->right_);
+			}
+		}
+		return true;
+	}
+
+	auto BinarySearchTree<T>::remove(const T& value) noexcept -> bool
+	{
+		if (remove_r(value, root_))
+		{
+			size_--;
+			return true;
+		}
+
+		return false;
+	}*/
+
+	auto CLR(std::ofstream& out, std::shared_ptr<Node> node) const noexcept -> bool
 	{
 		if (node)
 		{
@@ -165,16 +226,16 @@ public:
 		return in;
 	}
 
-	auto operator = (BinarySearchTree<T>&& tree) -> BinarySearchTree<T>&
+	auto BinarySearchTree<T>::operator=(BinarySearchTree &&tree) -> BinarySearchTree&
 	{
 		if (this == &tree)
 			return *this;
 
-		delete root_;
 		size_ = tree.size_;
-		root_ = tree.root_;
-		tree.root_ = nullptr;
 		tree.size_ = 0;
+
+		root = tree.root;
+		tree.root = nullptr;
 		return *this;
 	}
 
@@ -182,17 +243,8 @@ public:
 	{
 		if (this == &tree)
 			return *this;
-
-		if (tree.root_)
-		{
-			root_->copy(tree.root_); //left_ = new Node(node->left_->value_);
-		}
-		else
-		{
-			delete root_;
-			root_ = nullptr;
-		}
 		size_ = tree.size_;
+		root_->copy(tree.root_);
 		return *this;
 	}
 
@@ -202,7 +254,7 @@ public:
 	}
 
 private:
-	Node * root_;
+	std::shared_ptr<Node> root_;
 	size_t size_;
 };
 
