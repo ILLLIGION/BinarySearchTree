@@ -183,7 +183,7 @@ public:
 	{
 		bool result = false;
 		if (root_)
-			result = remove_node(value, root_);
+			result = Node::remove_node(value, root_);
 		else
 			return false;
 		if (result)
