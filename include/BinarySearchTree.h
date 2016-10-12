@@ -46,7 +46,7 @@ public:
 			return (equalityL && equalityR);
 		}
 
-		auto remove_node(const T& value, std::shared_ptr<Node>& node) noexcept ->  bool
+		static auto remove_node(const T& value, std::shared_ptr<Node>& node) noexcept ->  bool
 		{
 			if (!node)
 				return false;
