@@ -131,7 +131,7 @@ public:
         		return true;
     		}
     		std::shared_ptr<Node> thisNode = root_;
-    		while (!foundPlace)
+    		while (!result)
     		{
         		if (value == thisNode->value_)
             		return false;
@@ -140,7 +140,7 @@ public:
             			if (!thisNode->left_)
             			{
                 			thisNode->left_ = std::make_shared<Node>(value);
-                			foundPlace = true;
+                			result = true;
             			} 
 				else thisNode = thisNode->left_;
         		} 
