@@ -213,18 +213,26 @@ public:
 		return out;
 	}
 
-	friend auto operator >> (std::istream& in, BinarySearchTree<T>& tree) -> std::istream&
-	{
-		T value;
-		while (in >> value) tree.insert(value);
-		return in;
-	}
-	friend auto operator >> (std::ifstream& in, BinarySearchTree<T>& tree) -> std::ifstream&
-	{
-		T value;
-		while (in >> value) tree.insert(value);
-		return in;
-	}
+	 friend auto operator >> (std::istream& in, BinarySearchTree<T>& tree) -> std::istream&
+    {
+        size_t n;
+        if (!(in >> n)){
+            std::cerr << "wrong type of number of elements" << std::endl;
+            return in;
+        }
+        tree.size_ = n;
+        for (int i = 0; i < n; ++i)
+        {
+            T value;
+            if(in >> value)
+                tree.insert(value);
+            else {
+                std::cerr << "wrong input data" << std::endl;
+                return in;
+            }
+        }
+        return in;
+}
 
 	auto operator=(BinarySearchTree &&tree) -> BinarySearchTree&
 	{
