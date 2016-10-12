@@ -46,37 +46,37 @@ public:
 			return (equalityL && equalityR);
 		}
 
-		static auto remove_node(const T& value_, std::shared_ptr<Node>& thisNode) noexcept ->  bool
+		static auto remove_node(const T& value, std::shared_ptr<Node>& thisNode) noexcept ->  bool
         {
             if (!thisNode)
                 return false;
 
-            if (value_ < thisNode->value)
-                Node::remove_node(value_, thisNode->left);
-            if (value_ > thisNode->value)
-                Node::remove_node(value_, thisNode->right);
-            if (value_ == thisNode->value)
+            if (value < thisNode->value_)
+                Node::remove_node(value, thisNode->left_);
+            if (value > thisNode->value_)
+                Node::remove_node(value, thisNode->right_);
+            if (value == thisNode->value_)
             {
-                if (!thisNode->left && !thisNode->right)
+                if (!thisNode->left_ && !thisNode->right_)
                 {
                     thisNode = nullptr;
                     return true;
-                } else if (thisNode->left && !thisNode->right)
+                } else if (thisNode->left_ && !thisNode->right_)
                 {
-                    thisNode = thisNode->left;
+                    thisNode = thisNode->left_;
                     return true;
-                } else if (!thisNode->left && thisNode->right)
+                } else if (!thisNode->left_ && thisNode->right_)
                 {
-                    thisNode = thisNode->right;
+                    thisNode = thisNode->right_;
                     return true;
                 } else
                 {
-                    std::shared_ptr<Node> newRight = thisNode->right;
-                    thisNode = thisNode->left;
+                    std::shared_ptr<Node> newRight = thisNode->right_;
+                    thisNode = thisNode->left_;
                     std::shared_ptr<Node> newThisNode = thisNode;
-                    while (newThisNode->right)
-                        newThisNode = newThisNode->right;
-                    newThisNode->right = newRight;
+                    while (newThisNode->right_)
+                        newThisNode = newThisNode->right_;
+                    newThisNode->right_ = newRight;
                     return true;
                 }
             }
