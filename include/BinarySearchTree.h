@@ -121,38 +121,39 @@ public:
 	{
 		return size_;
 	};
+	
 	auto insert(const T& value) noexcept -> bool
 	{
-		bool result = false;
-		if (root_ == nullptr) {
-			root_ = std::make_shared<Node>(value);
-			return true;
-		}
-		std::shared_ptr<Node> thisNode = root_;
-		while (!result)
+    		bool result = false;
+    		if (root_ == nullptr) 
 		{
-			if (value == thisNode->value_)
-				return false;
-			if (value < thisNode->value_)
-			{
-				if (!thisNode->left_)
-				{
-					thisNode->left_ = std::make_shared<Node>(value);
-					result = true;
-				}
-				else
-					thisNode = thisNode->left_;
-			}
+        		root_ = std::make_shared<Node>(value);
+        		return true;
+    		}
+    		std::shared_ptr<Node> thisNode = root_;
+    		while (!foundPlace)
+    		{
+        		if (value == thisNode->value_)
+            		return false;
+        		if (value < thisNode->value_)
+        		{
+            			if (!thisNode->left_)
+            			{
+                			thisNode->left_ = std::make_shared<Node>(value);
+                			foundPlace = true;
+            			} 
+				else thisNode = thisNode->left_;
+        		} 
 			else if (!thisNode->right_)
-			{
-				thisNode->right_ = std::make_shared<Node>(value);
-				result = true;
-			}
+        		{
+            			thisNode->right_ = std::make_shared<Node>(value);
+            			result = true;
+        		} 
 			else
-				thisNode = thisNode->right_;
-		}
-		size_++;
-		return result;
+            		thisNode = thisNode->right_;
+    		}
+    		size_++;
+    		return result;
 	}
 
 	auto find(const T & value) const noexcept -> const T *
