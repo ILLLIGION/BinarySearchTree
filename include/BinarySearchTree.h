@@ -55,7 +55,7 @@ public:
 				remove_node(value, node->left_);
 			if (value > node->value_)
 				remove_node(value, node->right_);
-			if (value_ == node->value_)
+			if (value == node->value_)
 			{
 				if (!node->left_ && !node->right_)
 				{
