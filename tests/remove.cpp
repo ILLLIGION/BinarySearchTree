@@ -51,3 +51,38 @@ SCENARIO("The Node doesn't have any children")
 		}
 	}
 }
+
+SCENARIO("The Node has two children")
+{
+	GIVEN("Node with two children")
+	{
+		BinarySearchTree<int> tree1{10,5,15,2,7,6,1};
+		BinarySearchTree<int> tree2{10,6,7,15,2,1};
+		WHEN("remove")
+		{
+			tree1.remove(5);
+			THEN("Node is destroyed")
+			{
+				REQUIRE(tree1==tree2);
+			}
+		}
+	}
+}
+
+SCENARIO("Node we want to remove - is root")
+{
+	GIVEN("tree")
+	{
+		BinarySearchTree<int> tree1{4,2,1,3,5};
+		BinarySearchTree<int> tree2{3,2,1,5};
+		WHEN("remove")
+		{
+			tree1.remove(4);
+			THEN("root was removed. We have a new root")
+			{
+				REQUIRE(tree1==tree2);
+			}
+		}
+	}
+}
+
