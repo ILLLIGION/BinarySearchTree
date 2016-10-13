@@ -16,30 +16,6 @@ public:
 
 		auto _value() const noexcept -> T { return value; }
 
-		auto RCL(std::ostream& out, std::shared_ptr<Node> node) const noexcept -> bool
-		{
-			if (node)
-			{
-				RCL(out, node->right_);
-				out << node->value << ' ';
-				RCL(out, node->left_);
-				return true;
-			}
-			else return false;
-		}
-
-		auto CLR(std::ofstream& out, std::shared_ptr<Node> node) const noexcept -> bool
-		{
-			if (node)
-			{
-				out << node->value << ' ';
-				CLR(out, node->left_);
-				CLR(out, node->right_);
-				return true;
-			}
-			else return false;
-		}
-
 		auto equal(std::shared_ptr<Node> tree) const noexcept -> bool
 		{
 			if ((left_ && !tree->left_) || (right_ && !tree->right_))
@@ -219,6 +195,30 @@ public:
 			size_--;
 		return foundValue;
 	};
+
+	auto RCL(std::ostream& out, std::shared_ptr<Node> node) const noexcept -> bool
+	{
+		if (node)
+		{
+			RCL(out, node->right_);
+			out << node->value << ' ';
+			RCL(out, node->left_);
+			return true;
+		}
+		else return false;
+	}
+
+	auto CLR(std::ofstream& out, std::shared_ptr<Node> node) const noexcept -> bool
+	{
+		if (node)
+		{
+			out << node->value << ' ';
+			CLR(out, node->left_);
+			CLR(out, node->right_);
+			return true;
+		}
+		else return false;
+	}
 
 	friend auto operator << (std::ostream& out, const BinarySearchTree<T>& tree) -> std::ostream&
 	{
