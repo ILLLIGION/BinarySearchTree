@@ -8,52 +8,56 @@ class BinarySearchTree
 public:
 	struct Node
 	{
-		std::shared_ptr<Node> left;
-		std::shared_ptr<Node> right;
+		std::shared_ptr<Node> left_;
+		std::shared_ptr<Node> right_;
 		T value;
 
-		Node(T value_) : value(value_), left(nullptr), right(nullptr) {}
+		Node(T value_) : value(value_), left_(nullptr), right_(nullptr) {}
 
 		auto _value() const noexcept -> T { return value; }
 
-		auto symmetric(std::ostream& out, std::string lvl) const noexcept -> std::ostream&
+		auto RCL(std::ostream& out, std::shared_ptr<Node> node) const noexcept -> bool
 		{
-			if (right)
-				right->symmetric(out, lvl + '-');
-			out << lvl << value << "\n";
-			if (left)
-				left->symmetric(out, lvl + '-');
-			return out;
+			if (node)
+			{
+				RCL(out, node->right_);
+				out << node->value << ' ';
+				RCL(out, node->left_);
+				return true;
+			}
+			else return false;
 		}
 
-		auto direct(std::ofstream& out, std::string lvl) const noexcept -> std::ofstream&
+		auto CLR(std::ofstream& out, std::shared_ptr<Node> node) const noexcept -> bool
 		{
-			out << lvl << value << "\n";
-			if (left)
-				left->direct(out, lvl + '-');
-			if (right)
-				right->direct(out, lvl + '-');
-			return out;
+			if (node)
+			{
+				out << node->value << ' ';
+				CLR(out, node->left_);
+				CLR(out, node->right_);
+				return true;
+			}
+			else return false;
 		}
 
-		auto equal(std::shared_ptr<Node> rhs) const noexcept -> bool
+		auto equal(std::shared_ptr<Node> tree) const noexcept -> bool
 		{
-			if ((left && !rhs->left) || (right && !rhs->right))
+			if ((left_ && !tree->left_) || (right_ && !tree->right_))
 				return false;
-			if ((!left && rhs->left) || (!right && rhs->right))
+			if ((!left_ && tree->left_) || (!right_ && tree->right_))
 				return false;
 
 			bool equalLeft = true; bool equalRight = true;
-			if (value != rhs->value)
+			if (value != tree->value)
 				return false;
 			else
 			{
-				if (!left && !right)
+				if (!left_ && !right_)
 					return true;
-				if (left)
-					equalLeft = left->equal(rhs->left);
-				if (right)
-					equalRight = right->equal(rhs->right);
+				if (left_)
+					equalLeft = left_->equal(tree->left_);
+				if (right_)
+					equalRight = right_->equal(tree->right_);
 				return equalLeft && equalRight;
 			}
 		}
@@ -64,84 +68,84 @@ public:
 				return false;
 
 			if (value_ < thisNode->value)
-				Node::remove_node(value_, thisNode->left);
+				Node::remove_node(value_, thisNode->left_);
 			if (value_ > thisNode->value)
-				Node::remove_node(value_, thisNode->right);
+				Node::remove_node(value_, thisNode->right_);
 			if (value_ == thisNode->value)
 			{
-				if (!thisNode->left && !thisNode->right)
+				if (!thisNode->left_ && !thisNode->right_)
 				{
 					thisNode = nullptr;
 					return true;
 				}
-				else if (thisNode->left && !thisNode->right)
+				else if (thisNode->left_ && !thisNode->right_)
 				{
-					thisNode = thisNode->left;
+					thisNode = thisNode->left_;
 					return true;
 				}
-				else if (!thisNode->left && thisNode->right)
+				else if (!thisNode->left_ && thisNode->right_)
 				{
-					thisNode = thisNode->right;
+					thisNode = thisNode->right_;
 					return true;
 				}
 				else
 				{
-					std::shared_ptr<Node> newRight = thisNode->right;
-					thisNode = thisNode->left;
+					std::shared_ptr<Node> newRight = thisNode->right_;
+					thisNode = thisNode->left_;
 					std::shared_ptr<Node> newThisNode = thisNode;
-					while (newThisNode->right)
-						newThisNode = newThisNode->right;
-					newThisNode->right = newRight;
+					while (newThisNode->right_)
+						newThisNode = newThisNode->right_;
+					newThisNode->right_ = newRight;
 					return true;
 				}
 			}
 		}
 
-		friend auto copy(std::shared_ptr<Node> lhs, std::shared_ptr<Node> rhs) -> std::shared_ptr<Node>
+		friend auto copy(std::shared_ptr<Node> tree1, std::shared_ptr<Node> tree) -> std::shared_ptr<Node>
 		{
-			if (lhs->value != rhs->value) 
-				lhs->value = rhs->value;  
+			if (tree1->value != tree->value)
+				tree1->value = tree->value;
 
-			if (!lhs->left && rhs->left) 
-				lhs->left = std::make_shared<Node>(rhs->left->value); 
-			if (!lhs->right && rhs->right) 
-				lhs->right = std::make_shared<Node>(rhs->right->value);
+			if (!tree1->left_ && tree->left_)
+				tree1->left_ = std::make_shared<Node>(tree->left_->value);
+			if (!tree1->right_ && tree->right_)
+				tree1->right_ = std::make_shared<Node>(tree->right_->value);
 
-			if (lhs->left && !rhs->left) 
-				lhs->left = nullptr;
-			if (lhs->right && !rhs->right) 
-				lhs->right = nullptr;
+			if (tree1->left_ && !tree->left_)
+				tree1->left_ = nullptr;
+			if (tree1->right_ && !tree->right_)
+				tree1->right_ = nullptr;
 
-			if (lhs->left)
-				lhs->left = copy(lhs->left, rhs->left);
-			if (lhs->right)
-				lhs->right = copy(lhs->right, rhs->right);
+			if (tree1->left_)
+				tree1->left_ = copy(tree1->left_, tree->left_);
+			if (tree1->right_)
+				tree1->right_ = copy(tree1->right_, tree->right_);
 
-			return lhs;
+			return tree1;
 		}
 
 		~Node()
 		{
-			left = nullptr;
-			right = nullptr;
+			left_ = nullptr;
+			right_ = nullptr;
 		}
 	};
 
-	BinarySearchTree() : root(nullptr), size_(0) {}
-	BinarySearchTree(const std::initializer_list<T>& list) : size_(list.size()), root(nullptr)
+	BinarySearchTree() : root_(nullptr), size_(0) {}
+	BinarySearchTree(const std::initializer_list<T>& list) : size_(list.size()), root_(nullptr)
 	{
 		for (auto it = list.begin(); it != list.end(); ++it)
 			insert(*it);
 	}
 
-	BinarySearchTree(BinarySearchTree&& rhs) : size_(rhs.size_), root(rhs.root)
+	BinarySearchTree(BinarySearchTree&& tree) : size_(tree.size_), root_(tree.root_)
 	{
-		rhs.size_ = 0;
-		rhs.root = nullptr;
+		tree.size_ = 0;
+		tree.root_ = nullptr;
 	};
-	BinarySearchTree(const BinarySearchTree& rhs) : size_(rhs.size_), root(std::make_shared<Node>(0))
+	BinarySearchTree(const BinarySearchTree& tree) : size_(tree.size_), root_(std::make_shared<Node>(0))
 	{
-		root = copy(root, rhs.root);
+		root_ = copy(root_, tree.root_);
 	};
 
 	auto size() const noexcept->size_t 
@@ -151,41 +155,41 @@ public:
 	auto insert(const T& value) noexcept -> bool
 	{
 		bool foundPlace = false;
-		if (root == nullptr) {
-			root = std::make_shared<Node>(value);
+		if (root_ == nullptr) {
+			root_ = std::make_shared<Node>(value);
 			return true;
 		}
-		std::shared_ptr<Node> thisNode = root;
+		std::shared_ptr<Node> thisNode = root_;
 		while (!foundPlace)
 		{
 			if (value == thisNode->value)
 				return false;
 			if (value < thisNode->value)
 			{
-				if (!thisNode->left)
+				if (!thisNode->left_)
 				{
-					thisNode->left = std::make_shared<Node>(value);
+					thisNode->left_ = std::make_shared<Node>(value);
 					foundPlace = true;
 				}
 				else
-					thisNode = thisNode->left;
+					thisNode = thisNode->left_;
 			}
-			else if (!thisNode->right)
+			else if (!thisNode->right_)
 			{
-				thisNode->right = std::make_shared<Node>(value);
+				thisNode->right_ = std::make_shared<Node>(value);
 				foundPlace = true;
 			}
 			else
-				thisNode = thisNode->right;
+				thisNode = thisNode->right_;
 		}
 		size_++;
 		return foundPlace;
 	};
 	auto find(const T& value) const noexcept -> const T*
 	{
-		if (!root)
+		if (!root_)
 		return nullptr;
-		std::shared_ptr<Node> thisNode = root;
+		std::shared_ptr<Node> thisNode = root_;
 		while (1)
 		{
 			if (value == thisNode->value)
@@ -193,12 +197,12 @@ public:
 				return &thisNode->value;
 			}
 			else if (value < thisNode->value)
-			if (thisNode->left)
-				thisNode = thisNode->left;
+			if (thisNode->left_)
+				thisNode = thisNode->left_;
 			else { return nullptr;}
 			else {
-			if (thisNode->right)
-				thisNode = thisNode->right;
+			if (thisNode->right_)
+				thisNode = thisNode->right_;
 			else
 				return nullptr;
 			}
@@ -207,8 +211,8 @@ public:
 	auto remove(const T& value) noexcept -> bool
 	{
 		bool foundValue = false;
-		if (root)
-			foundValue = Node::remove_node(value, root);
+		if (root_)
+			foundValue = Node::remove_node(value, root_);
 		else
 			return false;
 		if (foundValue)
@@ -216,62 +220,50 @@ public:
 		return foundValue;
 	};
 
-	friend auto operator << (std::ofstream& out, const BinarySearchTree<T>& tree) -> std::ofstream&
-	{
-		tree.root->direct(out, "");
-		return out;
-	}
 	friend auto operator << (std::ostream& out, const BinarySearchTree<T>& tree) -> std::ostream&
 	{
-		tree.root->symmetric(out, "");
+		tree.RCL(out, tree.root_);
 		return out;
 	}
+
+	friend auto operator << (std::ofstream& out, const BinarySearchTree<T>& tree) -> std::ofstream&
+	{
+		tree.LCR(out, tree.root_);
+		return out;
+	}
+
 	friend auto operator >> (std::istream& in, BinarySearchTree<T>& tree) -> std::istream&
 	{
-		size_t n;
-		if (!(in >> n)) {
-			std::cerr << "wrong type of number of elements" << std::endl;
-			return in;
-		}
-		tree.size_ = n;
-		for (int i = 0; i < n; ++i)
-		{
-			T value;
-			if (in >> value)
-				tree.insert(value);
-			else {
-				std::cerr << "wrong input data" << std::endl;
-				return in;
-			}
-		}
+		T value;
+		while (in >> value) tree.insert(value);
 		return in;
 	}
 
-	auto operator = (BinarySearchTree&& rhs)->BinarySearchTree&
+	auto operator = (BinarySearchTree&& tree)->BinarySearchTree&
 	{
-		if (this == &rhs)
+		if (this == &tree)
 			return *this;
 
-		size_ = rhs.size_;
-		rhs.size_ = 0;
-		root = rhs.root;
-		rhs.root = nullptr;
+		size_ = tree.size_;
+		tree.size_ = 0;
+		root_ = tree.root_;
+		tree.root_ = nullptr;
 		return *this;
 	};
-	auto operator = (const BinarySearchTree& rhs)->BinarySearchTree&
+	auto operator = (const BinarySearchTree& tree) -> BinarySearchTree&
 	{
-		if (this == &rhs)
+		if (this == &tree) return *this;
+		else
+		{
+			root_ = nullptr;
+			size_ = tree.size_;
+			root_ = tree.root_->copy();
 			return *this;
-
-		size_ = rhs.size_;
-		std::cerr << "ok\n";
-		root = copy(root, rhs.root);
-		std::cerr << "ok2\n";
-		return *this;
+		}
 	};
-	auto operator == (const BinarySearchTree& rhs) -> bool
+	auto operator == (const BinarySearchTree& tree) -> bool
 	{
-		if (root->equal(rhs.root))
+		if (root_->equal(tree.root_))
 			return true;
 		else
 			return false;
@@ -279,11 +271,11 @@ public:
 
 	~BinarySearchTree()
 	{
-		root = nullptr;
+		root_ = nullptr;
 		size_ = 0;
 	};
 
 private:
 	size_t size_;
-	std::shared_ptr<Node> root;
+	std::shared_ptr<Node> root_;
 };
