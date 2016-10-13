@@ -263,10 +263,7 @@ public:
 	};
 	auto operator == (const BinarySearchTree& tree) -> bool
 	{
-		if (root_->equal(tree.root_))
-			return true;
-		else
-			return false;
+			return (root_->equal(tree.root_));
 	};
 
 	~BinarySearchTree()
