@@ -8,7 +8,7 @@ int main(int argc, char* argv[])
 	BinarySearchTree<double> Tree2{ 2.3, 4.2, 3.2, 5.32 };
 	std::cout << Tree2 << std::endl;
 
-	try
+	/*try
 	{
 		Tree2.insert(2.3);
 	}
@@ -32,7 +32,7 @@ int main(int argc, char* argv[])
 	{
 		std::cerr << error.what() << std::endl;
 	}
-
+*/
 	system("pause");
 	return 0;
 }
