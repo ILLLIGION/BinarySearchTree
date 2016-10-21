@@ -12,7 +12,7 @@ int main(int argc, char* argv[])
 	{
 		Tree2.insert(2.3);
 	}
-	catch(l_err& error)
+	catch(l_error& error)
 	{
 		std::cerr << error.what() << std::endl;
 	}
@@ -20,7 +20,7 @@ int main(int argc, char* argv[])
 	{
 		Tree2.find(100);
 	}
-	catch (l_err& error)
+	catch (l_error& error)
 	{
 		std::cerr << error.what() << std::endl;
 	}
@@ -28,7 +28,7 @@ int main(int argc, char* argv[])
 	{
 		Tree2.remove(100);
 	}
-	catch (l_err& error)
+	catch (l_error& error)
 	{
 		std::cerr << error.what() << std::endl;
 	}
