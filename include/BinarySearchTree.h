@@ -128,7 +128,7 @@ public:
 	{ 
 		return size_; 
 	};
-	auto insert(const T& value) noexcept -> bool
+	auto insert(const T& value) -> bool
 	{
 		bool foundPlace = false;
 		if (root_ == nullptr) {
@@ -161,7 +161,7 @@ public:
 		size_++;
 		return foundPlace;
 	};
-	auto find(const T& value) const noexcept -> const T*
+	auto find(const T& value) const -> const T*
 	{
 		if (!root_)
 		return nullptr;
@@ -184,7 +184,7 @@ public:
 			}
 		}
 	};
-	auto remove(const T& value) noexcept -> bool
+	auto remove(const T& value) -> bool
 	{
 		bool foundValue = false;
 		if (root_)
