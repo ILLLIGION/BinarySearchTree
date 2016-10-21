@@ -61,22 +61,6 @@ SCENARIO("if inserting element > root->value, add it to the right side of root")
         }
     }   
 }
-SCENARIO("if element already exists, size must stay constant")
-{
-    GIVEN("some tree")
-    {
-        BinarySearchTree<int> tree{1, 3, 5, 7};
-        size_t size = tree.size();
-        WHEN("insert element")
-        {
-            tree.insert(7);
-            THEN("size hasn't changed")
-            {
-                REQUIRE(tree.size() == size);
-            }
-        }
-    }
-}
 SCENARIO("if element doesn't exist, size must increase")
 {
     GIVEN("some tree")
