@@ -1,6 +1,13 @@
 #include <iostream>
 #include <fstream>
 #include <memory>
+#include <exception>
+
+struct logical_error : public std::logic_error
+{
+public:
+	logical_error(const std::string& data) : logic_error(data) {}
+};
 
 template <typename T>
 class BinarySearchTree
@@ -124,11 +131,11 @@ public:
 		root_ = copy(root_, tree.root_);
 	};
 
-	auto size() const noexcept->size_t 
-	{ 
-		return size_; 
+	auto size() const noexcept->size_t
+	{
+		return size_;
 	};
-	auto insert(const T& value) noexcept -> bool
+	auto insert(const T& value) -> bool
 	{
 		bool foundPlace = false;
 		if (root_ == nullptr) {
@@ -139,7 +146,7 @@ public:
 		while (!foundPlace)
 		{
 			if (value == thisNode->value)
-				return false;
+				throw logical_error("element already exists");
 			if (value < thisNode->value)
 			{
 				if (!thisNode->left_)
@@ -161,39 +168,43 @@ public:
 		size_++;
 		return foundPlace;
 	};
-	auto find(const T& value) const noexcept -> const T*
+	auto find(const T& value) const -> const T*
 	{
 		if (!root_)
-		return nullptr;
-		std::shared_ptr<Node> thisNode = root_;
-		while (1)
+		throw logical_error("empty tree");
+	std::shared_ptr<Node> thisNode = root_;
+	while (1)
+	{
+		if (value == thisNode->value)
 		{
-			if (value == thisNode->value)
-			{
-				return &thisNode->value;
-			}
-			else if (value < thisNode->value)
+			return &thisNode->value;
+		}
+		else if (value < thisNode->value)
 			if (thisNode->left_)
 				thisNode = thisNode->left_;
-			else { return nullptr;}
-			else {
+			else { throw logical_error("element not found"); }
+		else {
 			if (thisNode->right_)
 				thisNode = thisNode->right_;
 			else
-				return nullptr;
-			}
+				throw logical_error("element not found");
 		}
+	}
 	};
-	auto remove(const T& value) noexcept -> bool
+	auto remove(const T& value) -> bool
 	{
 		bool foundValue = false;
 		if (root_)
 			foundValue = Node::remove_node(value, root_);
 		else
-			return false;
+			throw logical_error("empty tree");
 		if (foundValue)
+		{
 			size_--;
-		return foundValue;
+			return true;
+		}
+		else
+			throw logical_error("element not found");
 	};
 
 	auto RCL(std::ostream& out, std::shared_ptr<Node> node) const noexcept -> bool
@@ -263,7 +274,7 @@ public:
 	};
 	auto operator == (const BinarySearchTree& tree) -> bool
 	{
-			return (root_->equal(tree.root_));
+		return (root_->equal(tree.root_));
 	};
 
 	~BinarySearchTree()
