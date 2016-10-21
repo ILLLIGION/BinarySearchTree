@@ -1,56 +1,79 @@
 #include "../include/BinarySearchTree.h"
 #include "catch.hpp"
 
-SCENARIO("pointer returned, if an element is in the tree") 
+SCENARIO("if element doesn't exist in the tree, return nullptr")
 {
-    GIVEN("tree of int") 
+    GIVEN("some tree")
     {
-        BinarySearchTree<int> tree{1, 4, 5};
-        WHEN("find") 
+        BinarySearchTree<int> tree{1, 2, 3, 4};
+        WHEN("looking for element, that doesn't exist")
         {
-            THEN("pointer isn't nullptr") 
+            THEN("return nullptr")
             {
-                REQUIRE(*(tree.find(1)) == 1);
-                REQUIRE(*(tree.find(4)) == 4);
-                REQUIRE(*(tree.find(5)) == 5);
+                REQUIRE(tree.find(10) == nullptr);
             }
         }
     }
 }
-
-SCENARIO("nullptr returned, if an element isn't in the tree") 
+SCENARIO("if element doesn't exist in the tree, throw an exception")
 {
-    GIVEN("tree of int") 
+    GIVEN("some tree")
     {
-        BinarySearchTree<int> tree{1, 4, 5};
-        WHEN("find") 
+        BinarySearchTree<int> tree{1, 2, 3, 4};
+        WHEN("looking for element, that doesn't exist")
         {
-            THEN("pointer is nullptr") 
+            THEN("throw an exception")
             {
-                REQUIRE(tree.find(2) == nullptr);
-                REQUIRE(tree.find(3) == nullptr);
-                REQUIRE(tree.find(6) == nullptr);
+                REQUIRE_NOTHROW(tree.find(7));
             }
         }
     }
 }
-
-SCENARIO("method works fro both constant and not constant trees") 
+SCENARIO("if tree is empty, throw an exception")
 {
-    GIVEN("constant and not constant trees") 
+    GIVEN("empty tree")
     {
-        const BinarySearchTree<int> tree1{2, 3, 6};
-        BinarySearchTree<int> tree2{1, 4, 5};
-        WHEN("find") 
+        BinarySearchTree<int> tree{};
+        WHEN("looking for element in empty tree")
         {
-            THEN("return two pointers") 
+            THEN("throw an exception")
             {
-                REQUIRE(tree1.find(2));
-                REQUIRE(tree1.find(3));
-                REQUIRE(tree1.find(6));
-                REQUIRE(tree2.find(1));
-                REQUIRE(tree2.find(4));
-                REQUIRE(tree2.find(5));
+                REQUIRE_NOTHROW(tree.find(1));
+            }
+        }
+    }
+}
+SCENARIO("if element already exists in the tree, return pointer to this element")
+{
+    GIVEN("some tree")
+    {
+        BinarySearchTree<int> tree{1, 2, 3, 4};
+        WHEN("looking for element, that already exists")
+        {
+            THEN("return pointer to this element")
+            {
+                REQUIRE(*(tree.find(2)) == 2);
+            }
+        }
+    }
+}
+SCENARIO("this method must work for constant tree and for non-constant tree")
+{
+    GIVEN("some tree")
+    {
+        BinarySearchTree<int> tree1{1, 2, 3};
+        const BinarySearchTree<int> tree2{3, 4, 5};
+        WHEN("looking for element in these trees")
+        {
+            THEN("method find works both for constant and non-constant tree")
+            {
+                bool f1 = false; bool f2 = false;
+                if (tree1.find(2))
+                    f1 = true;
+                if (tree2.find(5))
+                    f2 = true;
+                f1 &= f2;
+                REQUIRE(f1);
             }
         }
     }
