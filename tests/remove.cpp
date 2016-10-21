@@ -1,98 +1,111 @@
 #include "../include/BinarySearchTree.h"
 #include "catch.hpp"
 
-SCENARIO("Element isn't found")
+#include "../include/BinarySearchTree.h"
+#include "catch.hpp"
+
+SCENARIO("if we want to delete an element, that doesn't exist - return false")
 {
-	GIVEN("Tree")
+	GIVEN("some tree")
 	{
-		BinarySearchTree<int> tree{10,5,15,2,1};
-		WHEN("remove")
+		BinarySearchTree<int> tree{1, 2, 3};
+		WHEN("remove element")
 		{
-			THEN("This element mustn't be found")
+			THEN("such element doesn't exist in the tree")
 			{
-				REQUIRE(tree.remove(2314532) == 0);
+				REQUIRE_FALSE(tree.remove(5));
 			}
 		}
 	}
 }
-
-SCENARIO("The Node has only left child")
+SCENARIO("if we want to delete an element, that doesn't exist - throw an exception")
 {
-	GIVEN("Node with left child")
+	GIVEN("some tree")
 	{
-		BinarySearchTree<int> tree1{10,5,15,2,1};
-		BinarySearchTree<int> tree2{10,5,15,1};
-		WHEN("remove")
+		BinarySearchTree<int> tree{1, 2, 3};
+		WHEN("remove element")
 		{
-			tree1.remove(2);
-			THEN("Left child becomes new Node")
+			THEN("throw an exception")
 			{
-				REQUIRE(tree1==tree2);
+                REQUIRE_NOTHROW(tree.remove(5));
 			}
 		}
 	}
 }
-
-SCENARIO("The Node has only right child")
+SCENARIO("remove element that has nothing on the left side AND nothing on the right side")
 {
-	GIVEN("Node with right child")
+	GIVEN("some tree")
 	{
-		BinarySearchTree<int> tree1{10,5,15,2,3};
-		BinarySearchTree<int> tree2{10,5,15,3};
-		WHEN("remove")
+		BinarySearchTree<int> tree{4, 2, 1, 3, 5};
+		BinarySearchTree<int> tree2{4, 2, 1, 3};
+		WHEN("remove element")
 		{
-			tree1.remove(2);
-			THEN("Right child becomes new Node")
-			{
-				REQUIRE(tree1==tree2);
-			}
-		}
-	}
-}
-
-SCENARIO("The Node doesn't have any children")
-{
-	GIVEN("Node without children")
-	{
-		BinarySearchTree<int> tree1{10,5,15,2};
-		BinarySearchTree<int> tree2{10,5,15};
-		WHEN("remove")
-		{
-			tree1.remove(2);
-			THEN("Nide is just destroyed")
-			{
-				REQUIRE(tree1==tree2);
-			}
-		}
-	}
-}
-
-SCENARIO("The Node has two children")
-{
-	GIVEN("Node with two children")
-	{
-		BinarySearchTree<int> tree{20, 10, 9, 26, 24, 27, 22, 23, 25, 21, 28};
-		BinarySearchTree<int> tree2{20, 10, 9, 26, 27, 22, 23, 25, 21, 28};
-		WHEN("remove")
-		{
-			tree.remove(24);
-			THEN("Node is removed")
+			tree.remove(5);
+			THEN("element was removed")
 			{
 				REQUIRE(tree2 == tree);
 			}			
 		}
 	}
 }
-SCENARIO("Node is root")
+SCENARIO("remove element that has something on the left side AND nothing on the right side")
 {
-	GIVEN("Root")
+	GIVEN("some tree")
+	{
+		BinarySearchTree<int> tree{20, 10, 26, 9, 24, 27, 22, 23, 25, 21, 28};
+		BinarySearchTree<int> tree2{20, 9, 26, 24, 27, 22, 23, 25, 21, 28};
+		WHEN("remove element")
+		{
+			tree.remove(10);
+			THEN("element was removed")
+			{
+				REQUIRE(tree2 == tree);
+			}			
+		}
+	}
+}
+SCENARIO("remove element that has nothing on the left side AND something on the right side")
+{
+	GIVEN("some tree")
+	{
+		BinarySearchTree<int> tree{20, 10, 9, 26, 24, 27, 22, 23, 25, 21, 28};
+		BinarySearchTree<int> tree2{20, 10, 9, 26, 24, 22, 23, 25, 21, 28};
+		WHEN("remove element")
+		{
+			tree.remove(27);
+			THEN("element was removed")
+			{
+				REQUIRE(tree2 == tree);
+			}			
+		}
+	}
+}
+SCENARIO("remove element that has something on the left side AND something on the right side")
+{
+	GIVEN("some tree")
+	{
+		BinarySearchTree<int> tree{20, 10, 9, 26, 24, 27, 22, 23, 25, 21, 28};
+		BinarySearchTree<int> tree2{20, 10, 9, 26, 27, 22, 23, 25, 21, 28};
+		WHEN("remove element")
+		{
+			tree.remove(24);
+			THEN("element was removed")
+			{
+				REQUIRE(tree2 == tree);
+			}			
+		}
+	}
+}
+SCENARIO("remove root")
+{
+	GIVEN("some tree")
 	{
 		BinarySearchTree<int> tree{4, 2, 1, 3, 5};
 		BinarySearchTree<int> tree2{2, 1, 3, 5};
-		WHEN("remove")
+		WHEN("remove root")
 		{
 			tree.remove(4);
-			THEN("Node is removed")
+			THEN("element was removed")
 			{
 				REQUIRE(tree2 == tree);
 			}			
