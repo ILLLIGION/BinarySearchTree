@@ -3,10 +3,10 @@
 #include <memory>
 #include <exception>
 
-struct logical_error : public std::logic_error
+struct l_error : public std::logic_error
 {
 public:
-	logical_error(const std::string& data) : logic_error(data) {}
+	l_error(const std::string& data) : logic_error(data) {}
 };
 
 template <typename T>
@@ -146,7 +146,7 @@ public:
 		while (!foundPlace)
 		{
 			if (value == thisNode->value)
-				throw logical_error("element already exists");
+				throw l_error("element already exists");
 			if (value < thisNode->value)
 			{
 				if (!thisNode->left_)
@@ -171,7 +171,7 @@ public:
 	auto find(const T& value) const -> const T*
 	{
 		if (!root_)
-		throw logical_error("empty tree");
+		throw l_error("empty tree");
 	std::shared_ptr<Node> thisNode = root_;
 	while (1)
 	{
@@ -182,12 +182,12 @@ public:
 		else if (value < thisNode->value)
 			if (thisNode->left_)
 				thisNode = thisNode->left_;
-			else { throw logical_error("element not found"); }
+			else { throw l_error("element not found"); }
 		else {
 			if (thisNode->right_)
 				thisNode = thisNode->right_;
 			else
-				throw logical_error("element not found");
+				throw l_error("element not found");
 		}
 	}
 	};
@@ -197,14 +197,14 @@ public:
 		if (root_)
 			foundValue = Node::remove_node(value, root_);
 		else
-			throw logical_error("empty tree");
+			throw l_error("empty tree");
 		if (foundValue)
 		{
 			size_--;
 			return true;
 		}
 		else
-			throw logical_error("element not found");
+			throw l_error("element not found");
 	};
 
 	auto RCL(std::ostream& out, std::shared_ptr<Node> node) const noexcept -> bool
