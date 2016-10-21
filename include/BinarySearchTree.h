@@ -23,26 +23,6 @@ public:
 
         auto _value() const noexcept -> T { return value; }
 
-        auto symmetric(std::ostream& out, std::string lvl) const noexcept -> std::ostream&
-        {
-            if (right)
-                right->symmetric(out, lvl + '-');
-            out << lvl << value << "\n";
-            if (left)
-                left->symmetric(out, lvl + '-');
-            return out;
-        }
-
-        auto direct(std::ofstream& out, std::string lvl) const noexcept -> std::ofstream&
-        {
-            out << lvl << value << "\n";
-            if (left)
-                left->direct(out, lvl + '-');
-            if (right)
-                right->direct(out, lvl + '-');
-            return out;
-        }
-
         auto equal(std::shared_ptr<Node> rhs) const noexcept -> bool
         {
             // если какая-либо ветка существует, а соответствующая в другом дереве - нет,
@@ -137,12 +117,37 @@ public:
     BinarySearchTree(const std::initializer_list<T>& list);
     BinarySearchTree(BinarySearchTree&& rhs);
     BinarySearchTree(const BinarySearchTree& tree);
+	
+	
+       auto RCL(std::ostream& out, std::shared_ptr<Node> node) const noexcept -> bool
+	{
+		if (node)
+		{
+			RCL(out, node->right_);
+			out << node->value << ' ';
+			RCL(out, node->left_);
+			return true;
+		}
+		else return false;
+	}
+
+	auto CLR(std::ofstream& out, std::shared_ptr<Node> node) const noexcept -> bool
+	{
+		if (node)
+		{
+			out << node->value << ' ';
+			CLR(out, node->left_);
+			CLR(out, node->right_);
+			return true;
+		}
+		else return false;
+	}
 
     auto size() const noexcept -> size_t;
     bool empty() const noexcept;
-    auto insert(const T& value) noexcept -> bool;
-    auto find(const T& value) const noexcept -> const T*;
-    auto remove(const T& value) noexcept -> bool;
+    auto insert(const T& value) -> bool;
+    auto find(const T& value) const -> const T*;
+    auto remove(const T& value) -> bool;
 
     friend auto operator << (std::ofstream& out, const BinarySearchTree<T>& tree) -> std::ofstream&
     {
@@ -219,7 +224,7 @@ auto BinarySearchTree<T>::empty() const noexcept -> bool
 }
 
 template <typename T>
-auto BinarySearchTree<T>::insert(const T& value) noexcept -> bool try
+auto BinarySearchTree<T>::insert(const T& value) -> bool try
 {
     bool foundPlace = false;
     if (root == nullptr)
@@ -258,7 +263,7 @@ catch(BinarySearchTree<T>::bad_argument& err)
 }
 
 template <typename T>
-auto BinarySearchTree<T>::find(const T& value) const noexcept -> const T* try
+auto BinarySearchTree<T>::find(const T& value) const -> const T* try
 {
     if (!root)
 	    throw BinarySearchTree<T>::bad_argument("your tree is empty.");
@@ -290,7 +295,7 @@ catch(BinarySearchTree<T>::bad_argument& err)
 }
 
 template <typename T>
-auto BinarySearchTree<T>::remove(const T& value) noexcept -> bool try
+auto BinarySearchTree<T>::remove(const T& value) -> bool try
 {
     bool foundValue = false;
     if (root)
