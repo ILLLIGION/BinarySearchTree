@@ -1,9 +1,6 @@
 #include "../include/BinarySearchTree.h"
 #include "catch.hpp"
 
-#include "../include/BinarySearchTree.h"
-#include "catch.hpp"
-
 SCENARIO("if we want to delete an element, that doesn't exist - return false")
 {
 	GIVEN("some tree")
