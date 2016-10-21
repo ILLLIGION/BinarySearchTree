@@ -128,9 +128,9 @@ public:
 	{
 		if (node)
 		{
-			RCL(out, node->right_);
+			RCL(out, node->right);
 			out << node->value << ' ';
-			RCL(out, node->left_);
+			RCL(out, node->left);
 			return true;
 		}
 		else return false;
@@ -141,8 +141,8 @@ public:
 		if (node)
 		{
 			out << node->value << ' ';
-			CLR(out, node->left_);
-			CLR(out, node->right_);
+			CLR(out, node->left);
+			CLR(out, node->right);
 			return true;
 		}
 		else return false;
@@ -150,13 +150,13 @@ public:
 
     	friend auto operator << (std::ostream& out, const BinarySearchTree<T>& tree) -> std::ostream&
 	{
-		tree.RCL(out, tree.root_);
+		tree.RCL(out, tree.root);
 		return out;
 	}
 
 	friend auto operator << (std::ofstream& out, const BinarySearchTree<T>& tree) -> std::ofstream&
 	{
-		tree.LCR(out, tree.root_);
+		tree.LCR(out, tree.root);
 		return out;
 	}
 	
@@ -225,7 +225,7 @@ auto BinarySearchTree<T>::empty() const noexcept -> bool
 }
 
 template <typename T>
-auto BinarySearchTree<T>::insert(const T& value) noexcept -> bool try
+auto BinarySearchTree<T>::insert(const T& value) -> bool try
 {
     bool foundPlace = false;
     if (root == nullptr)
@@ -264,7 +264,7 @@ catch(BinarySearchTree<T>::bad_argument& err)
 }
 
 template <typename T>
-auto BinarySearchTree<T>::find(const T& value) const noexcept -> const T* try
+auto BinarySearchTree<T>::find(const T& value) const -> const T* try
 {
     if (!root)
 	    throw BinarySearchTree<T>::bad_argument("your tree is empty.");
@@ -296,7 +296,7 @@ catch(BinarySearchTree<T>::bad_argument& err)
 }
 
 template <typename T>
-auto BinarySearchTree<T>::remove(const T& value) noexcept -> bool try
+auto BinarySearchTree<T>::remove(const T& value) -> bool try
 {
     bool foundValue = false;
     if (root)
